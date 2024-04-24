@@ -77,19 +77,33 @@ int * parMergeSort(int *arr,int l,int r){
 	
 	if(l<r){
 		
+		if ((r- l) > 1000) {
+		
 		int m=(l+r)/2;
 		#pragma omp parallel sections
 		{
 		
-		#pragma omp section 
+		#pragma omp section
 		arr=parMergeSort(arr,l,m);
 		
-		#pragma omp section 
+		#pragma omp section
+
 		arr=parMergeSort(arr,m+1,r);
 			
 		}
 		
 		arr=merge(arr,l,m,r);
+		
+		
+	}
+	else{
+		int m=(l+r)/2;
+		
+		arr=seqMergeSort(arr,l,m);
+		arr=seqMergeSort(arr,m+1,r);
+		arr=merge(arr,l,m,r);
+	}
+	
 	 }
 	
 	
@@ -98,7 +112,7 @@ return arr;
 
 
 int main(){
-	int n=500000;
+	int n=50000;
 	
 	int *arr1=new int[n];
 	int *arr2=new int[n];
